@@ -11,8 +11,8 @@ uniform float time;
 #define PI 3.141593
 
 #define SDIST 0.03
-#define SENSOR_ROT 40.
-#define TURN_ROT 50.
+#define SENSOR_ROT 15.
+#define TURN_ROT 40.
 
 vec2 rot(vec2 st, float t) {
     float tt = t / 180. * PI;

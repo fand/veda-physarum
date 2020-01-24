@@ -30,7 +30,8 @@ uniform vec2 resolution;
 uniform sampler2D particleTexture;
 uniform sampler2D backbuffer;
 
-#define CELL_DIVISION 1000.
+#define CELL_DIVISION 2000.
+#define ATTENUATION 2.5
 
 float getCell(vec2 uv) {
   uv = floor(uv * CELL_DIVISION) / CELL_DIVISION;
@@ -53,6 +54,8 @@ void main() {
       getCell(uv + vec2(-d.x, d.y)) +
       getCell(uv + vec2(-d.x, -d.y))
   ) / 16.;
+
+  c *= ATTENUATION;
 
   gl_FragColor = vec4(c, c, c, 1);
 }

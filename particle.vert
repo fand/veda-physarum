@@ -11,7 +11,7 @@ uniform float vertexCount;
 uniform float time;
 uniform vec3 mouseButtons;
 
-#define POINTSIZE 4.0
+#define POINTSIZE 2.0
 
 
 void main(){
