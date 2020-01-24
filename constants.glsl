@@ -1,0 +1,2 @@
+#define POINTSIZE 1.0
+#define POINTPOWER 1.0
