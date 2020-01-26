@@ -33,7 +33,7 @@ precision mediump float;
 uniform vec2 resolution;
 uniform sampler2D densityTexture;
 uniform sampler2D backbuffer;
-
+uniform vec2 mouse;
 
 vec3 hsv2rgb(vec3 c)
 {
@@ -93,6 +93,14 @@ void main() {
   gl_FragColor = vec4(.2, .3, .8, 1.) * c;
   gl_FragColor.rgb = hueRot(gl_FragColor.rgb, c);
   // gl_FragColor += texture2D(backbuffer, (uv - .5) * .99 + .5) * .9;
+
+
+  // draw mouse
+  vec2 p = uv * 2. - 1.;
+  p.x *= resolution.x / resolution.y;
+  vec2 mp = mouse *2. - 1.;
+  mp.x *= resolution.x / resolution.y;
+  gl_FragColor += (.01 / length(p - mp)) * vec4(.1, .7, 1, 1);
 
   // add backbuffer;
   // vec4 bb = texture2D(backbuffer, uv0 + vec2(0, 0.000));

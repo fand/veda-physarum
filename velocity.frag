@@ -10,7 +10,7 @@ uniform float time;
 
 #define PI 3.141593
 
-#define SDIST 0.02
+#define SDIST 0.006
 #define SENSOR_ROT 20.
 #define TURN_ROT 30.
 
@@ -25,7 +25,7 @@ float atan2(in float y, in float x){
 }
 
 void main(){
-    if (FRAMEINDEX == 0) {
+    if (FRAMEINDEX == 0|| mouseButtons.x > 0.) {
         float id = gl_FragCoord.x * 3. + gl_FragCoord.y;
         gl_FragColor = vec4(
             cos(id),
@@ -45,7 +45,7 @@ void main(){
     vec2 newVelocity = velocity;
 
     bool move = mouseButtons.x > 0.;
-    if (move) {
+    if (move || true) {
         // Get sensor positions
         vec2 scpos = position + velocity * SDIST;
         vec2 slpos = position + rot(velocity, SENSOR_ROT) * SDIST;

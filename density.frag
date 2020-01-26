@@ -30,6 +30,7 @@ uniform vec2 resolution;
 uniform float time;
 uniform sampler2D particleTexture;
 uniform sampler2D backbuffer;
+uniform vec2 mouse;
 
 #define CELL_DIVISION 100.
 #define ATTENUATION 3.5
@@ -75,17 +76,11 @@ void main() {
 
   c *= ATTENUATION;
 
-  // if (mod(time, 2.) < .7) {
-  //   // c += sin(length(uv - .5) * 8.) * .5 + .5;
-  // }
-  vec2 p = (gl_FragCoord.xy * 2. - resolution) / min(resolution.x, resolution.y);
-  p = abs(p);
-  // c += smoothstep(.03, .0, abs(.6 - p.x - p.y));
-  // p = rot(p, 10.);
-  // p *= p;
-  // c += smoothstep(.03, .0, abs(.35 - p.x - p.y));
-  float l = length(p);
-  // c += smoothstep(.2, .0, abs(sin(l + time)))) * .4;
+  vec2 p = uv * 2. - 1.;
+  p.x *= resolution.x / resolution.y;
+  vec2 mp = mouse *2. - 1.;
+  mp.x *= resolution.x / resolution.y;
+  c *= 1. - smoothstep(.1 / length(p - mp), .6, .1);
 
   gl_FragColor = vec4(c, c, c, 1);
 }
