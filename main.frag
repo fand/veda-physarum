@@ -1,7 +1,7 @@
 /*{
   "pixelRatio": 1,
   "frameskip": 1,
-  "vertexCount": 100000,
+  "vertexCount": 1000000,
   "vertexMode": "POINTS",
   "PASSES": [
     {
@@ -59,9 +59,17 @@ vec3 hueRot(vec3 rgb, float c) {
   return hsv2rgb(hsv);
 }
 
+vec2 rot(vec2 st, float t) {
+    float s = sin(t), c = cos(t);
+    return mat2(c, -s, s, c) * st;
+}
+
 void main() {
   vec2 uv = gl_FragCoord.xy / resolution;
+  vec2 uv0 = uv;
 
+  float l = length(uv - .5);
+  // uv = rot(uv - .5, sin(l *8.) * 3.14) + .5;
 
   float c = texture2D(densityTexture, uv).x;
 
@@ -79,16 +87,32 @@ void main() {
   //     texture2D(densityTexture, uv + vec2(-d.x, -d.y)).x
   // ) / 16.;
 
-  // c = smoothstep(0., 1., c);
+  // c = smoothstep(0., .2, c);
+  // c *= .7;
 
-  gl_FragColor = vec4(.2, .8, .5, 1.) * c;
+  gl_FragColor = vec4(.2, .3, .8, 1.) * c;
+  gl_FragColor.rgb = hueRot(gl_FragColor.rgb, c);
   // gl_FragColor += texture2D(backbuffer, (uv - .5) * .99 + .5) * .9;
 
   // add backbuffer;
-  vec4 bb = texture2D(backbuffer, uv + vec2(0, 0.002));
-  // bb = texture2D(backbuffer, (uv - .5) * .9999 + .5);
+  // vec4 bb = texture2D(backbuffer, uv0 + vec2(0, 0.000));
+  // bb = texture2D(backbuffer, (uv0 - .5) * .999 + .5);
 
-  bb.rgb = hueRot(bb.rgb, .04).rgb;
-  gl_FragColor += bb * .9;
+  vec2 d = vec2(1) / resolution.xy;
+  vec4 bb = (
+    texture2D(backbuffer, uv0) * -4.0 +
+    texture2D(backbuffer, uv0 + vec2(d.x, 0)) * 2. +
+    texture2D(backbuffer, uv0 + vec2(-d.x, 0)) * 2. +
+    texture2D(backbuffer, uv0 + vec2(0, d.y)) * 2. +
+    texture2D(backbuffer, uv0 + vec2(0, -d.y)) * 2. +
+    texture2D(backbuffer, uv0 + vec2(d.x, d.y)) +
+    texture2D(backbuffer, uv0 + vec2(d.x, -d.y)) +
+    texture2D(backbuffer, uv0 + vec2(-d.x, d.y)) +
+    texture2D(backbuffer, uv0 + vec2(-d.x, -d.y))
+  ) / 9.;
 
+  bb.rgb = hueRot(bb.rgb, .03).rgb;
+  gl_FragColor += bb * .99;
+
+  gl_FragColor.a = 1.;
 }

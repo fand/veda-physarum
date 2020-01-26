@@ -29,7 +29,7 @@
 
 precision mediump float;
 
-#define POINTPOWER 0.5
+#define POINTPOWER 0.1
 
 void main() {
   gl_FragColor = vec4(POINTPOWER);

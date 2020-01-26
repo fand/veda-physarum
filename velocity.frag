@@ -10,9 +10,9 @@ uniform float time;
 
 #define PI 3.141593
 
-#define SDIST 0.03
-#define SENSOR_ROT 15.
-#define TURN_ROT 40.
+#define SDIST 0.02
+#define SENSOR_ROT 20.
+#define TURN_ROT 30.
 
 vec2 rot(vec2 st, float t) {
     float tt = t / 180. * PI;
@@ -20,9 +20,21 @@ vec2 rot(vec2 st, float t) {
     return mat2(c, -s, s, c) * st;
 }
 
+float atan2(in float y, in float x){
+    return x == 0.0 ? sign(y) * PI / 2. : atan(y, x);
+}
+
 void main(){
     if (FRAMEINDEX == 0) {
-        gl_FragColor = vec4(0, 1, 0, 1);
+        float id = gl_FragCoord.x * 3. + gl_FragCoord.y;
+        gl_FragColor = vec4(
+            cos(id),
+            sin(id),
+            0,
+            1
+        );
+
+        // gl_FragColor = vec4(0, 1, 0, 1);
         return;
     }
 
@@ -70,6 +82,13 @@ void main(){
             }
         }
     }
+
+    // float a = atan2(newVelocity.x, newVelocity.y) / PI * .5 + .5;
+    // a = fract(a);
+    // a = floor(a * 6.) / 3. * PI;
+
+    // newVelocity = rot(vec2(0, 1), a);
+    // velocity =
 
     gl_FragColor = vec4(newVelocity, 0, 1);
 }
